@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView, Animated } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const { width, height } = Dimensions.get('window');
 const BOWL_WIDTH = 120;
@@ -11,7 +12,7 @@ const COLUMN_WIDTH = width / COLUMNS;
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState('home');
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(120); // 2 minutes
+  const [timeLeft, setTimeLeft] = useState(60); // 1 minute
   const [gameActive, setGameActive] = useState(false);
   const [bowlPosition, setBowlPosition] = useState(0);
   const [currentColumn, setCurrentColumn] = useState(0);
@@ -21,6 +22,31 @@ export default function App() {
   
   const gameTimerRef = useRef(null);
   const foodSpawnTimerRef = useRef(null);
+  const heartbeatAnim = useRef(new Animated.Value(1)).current;
+
+  // Heartbeat animation effect
+  useEffect(() => {
+    const heartbeat = () => {
+      Animated.sequence([
+        Animated.timing(heartbeatAnim, {
+          toValue: 1.1,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+        Animated.timing(heartbeatAnim, {
+          toValue: 1,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+      ]).start(() => {
+        setTimeout(heartbeat, 1000);
+      });
+    };
+    
+    if (currentScreen === 'home') {
+      heartbeat();
+    }
+  }, [currentScreen, heartbeatAnim]);
 
   // Food types - Expanded variety
   const foodTypes = [
@@ -236,37 +262,75 @@ export default function App() {
   // Render Home Screen
   if (currentScreen === 'home') {
     return (
-      <View style={styles.homeContainer}>
-        <Text style={styles.title}>🥗 Healthy Food Catch</Text>
-        <Text style={styles.subtitle}>Catch the good, avoid the bad!</Text>
+      <LinearGradient
+        colors={['#fceabb', '#f8b500']}
+        style={styles.homeContainer}
+      >
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>Healthy Food Catch</Text>
+          <View style={styles.titleUnderline} />
+        </View>
+        <Text style={styles.subtitle}>Catch healthy foods, avoid junk food!</Text>
+        <Text style={styles.tagline}>Play • Learn • Stay Healthy</Text>
         
         <View style={styles.instructionsContainer}>
-          <Text style={styles.instructionsTitle}>How to Play:</Text>
-          <Text style={styles.instruction}>🍎 Catch healthy fruits & vegetables</Text>
-          <Text style={styles.instruction}>❌ Avoid unhealthy fast food & sweets</Text>
-          <Text style={styles.instruction}>📱 Move the bowl left and right</Text>
-          <Text style={styles.instruction}>🎯 Score points for healthy choices</Text>
-          <Text style={styles.instruction}>💔 Lose points for unhealthy ones</Text>
-          <Text style={styles.instruction}>⏱️ Game lasts 2 minutes</Text>
+          <View style={styles.instructionHeader}>
+            <Text style={styles.instructionsTitle}>How to Play</Text>
+          </View>
+          <View style={styles.instructionGrid}>
+            <TouchableOpacity style={styles.instructionCard} activeOpacity={0.7}>
+              <View style={styles.instructionIconContainer}>
+                <View style={styles.instructionIcon}>
+                  <Text style={styles.instructionIconText}>✓</Text>
+                </View>
+              </View>
+              <Text style={styles.instructionText}>Catch healthy foods</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.instructionCard} activeOpacity={0.7}>
+              <View style={styles.instructionIconContainer}>
+                <View style={styles.instructionIcon}>
+                  <Text style={styles.instructionIconText}>✗</Text>
+                </View>
+              </View>
+              <Text style={styles.instructionText}>Avoid junk food</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.instructionCard} activeOpacity={0.7}>
+              <View style={styles.instructionIconContainer}>
+                <View style={styles.instructionIcon}>
+                  <Text style={styles.instructionIconText}>⟷</Text>
+                </View>
+              </View>
+              <Text style={styles.instructionText}>Tap to move bowl</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.instructionCard} activeOpacity={0.7}>
+              <View style={styles.instructionIconContainer}>
+                <View style={styles.instructionIcon}>
+                  <Text style={styles.instructionIconText}>60</Text>
+                </View>
+              </View>
+              <Text style={styles.instructionText}>Seconds to play</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
-        <TouchableOpacity style={styles.startButton} onPress={startGame}>
-          <Text style={styles.startButtonText}>Start Game</Text>
-        </TouchableOpacity>
-
-        <View style={styles.foodPreview}>
-          <Text style={styles.foodPreviewTitle}>Foods in the Game:</Text>
-          <Text style={styles.healthyFood}>🍎 🍌 🥕 🥦 🥬</Text>
-          <Text style={styles.unhealthyFood}>🍔 🍕 🍟 🍦 🍫</Text>
-        </View>
-      </View>
+        <Animated.View style={[styles.startButtonContainer, { transform: [{ scale: heartbeatAnim }] }]}>
+          <TouchableOpacity style={styles.startButton} onPress={startGame}>
+            <View style={styles.startButtonGradient}>
+              <Text style={styles.startButtonText}>Start Game</Text>
+            </View>
+          </TouchableOpacity>
+        </Animated.View>
+      </LinearGradient>
     );
   }
 
   // Render Game Screen
   if (currentScreen === 'game') {
     return (
-      <View style={styles.gameContainer}>
+      <LinearGradient
+        colors={['#fceabb', '#f8b500']}
+        style={styles.gameContainer}
+      >
         {/* Game UI */}
         <View style={styles.gameUI}>
           <View style={styles.scoreContainer}>
@@ -333,19 +397,23 @@ export default function App() {
             style={styles.controlButton}
             onPress={() => moveBowl('left')}
           >
-            <Text style={styles.controlText}>←</Text>
+            <View style={styles.controlButtonInner}>
+              <Text style={styles.controlText}>←</Text>
+            </View>
           </TouchableOpacity>
           
           <TouchableOpacity
             style={styles.controlButton}
             onPress={() => moveBowl('right')}
           >
-            <Text style={styles.controlText}>→</Text>
+            <View style={styles.controlButtonInner}>
+              <Text style={styles.controlText}>→</Text>
+            </View>
           </TouchableOpacity>
         </View>
 
 
-      </View>
+      </LinearGradient>
     );
   }
 
@@ -356,7 +424,10 @@ export default function App() {
     const totalCalories = caughtFoods.reduce((total, food) => total + food.calories, 0);
 
     return (
-      <View style={styles.resultsContainer}>
+      <LinearGradient
+        colors={['#fceabb', '#f8b500']}
+        style={styles.resultsContainer}
+      >
         <Text style={styles.resultsTitle}>Game Results</Text>
         
         <View style={styles.scoreCard}>
@@ -398,14 +469,18 @@ export default function App() {
 
         <View style={styles.buttonSection}>
           <TouchableOpacity style={styles.playAgainButton} onPress={playAgain}>
-            <Text style={styles.playAgainButtonText}>Play Again</Text>
+            <View style={styles.playAgainButtonInner}>
+              <Text style={styles.playAgainButtonText}>Play Again</Text>
+            </View>
           </TouchableOpacity>
           
           <TouchableOpacity style={styles.homeButton} onPress={goHome}>
-            <Text style={styles.homeButtonText}>Back to Home</Text>
+            <View style={styles.homeButtonInner}>
+              <Text style={styles.homeButtonText}>Back to Home</Text>
+            </View>
           </TouchableOpacity>
         </View>
-      </View>
+      </LinearGradient>
     );
   }
 
@@ -416,85 +491,151 @@ const styles = StyleSheet.create({
   // Home Screen Styles
   homeContainer: {
     flex: 1,
-    backgroundColor: '#4CAF50',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
   },
+  titleContainer: {
+    alignItems: 'center',
+    marginBottom: 15,
+  },
   title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#fff',
+    fontSize: 38,
+    fontWeight: '800',
+    color: '#8B4513',
     textAlign: 'center',
+    marginBottom: 8,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: {width: 2, height: 2},
+    textShadowRadius: 4,
+    letterSpacing: 1,
+  },
+  titleUnderline: {
+    width: 120,
+    height: 4,
+    backgroundColor: '#FF6B35',
+    borderRadius: 2,
     marginBottom: 10,
   },
   subtitle: {
-    fontSize: 18,
-    color: '#fff',
+    fontSize: 22,
+    color: '#8B4513',
     textAlign: 'center',
-    opacity: 0.9,
+    marginBottom: 8,
+    fontWeight: '600',
+    textShadowColor: 'rgba(0, 0, 0, 0.2)',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 2,
+  },
+  tagline: {
+    fontSize: 16,
+    color: '#8B4513',
+    textAlign: 'center',
     marginBottom: 30,
+    fontWeight: '500',
+    opacity: 0.8,
   },
   instructionsContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
-    padding: 20,
-    borderRadius: 15,
-    marginBottom: 30,
-    width: width - 40,
-  },
-  instructionsTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-  instruction: {
-    fontSize: 16,
-    color: '#fff',
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  startButton: {
-    backgroundColor: '#FF6B6B',
-    paddingVertical: 15,
-    paddingHorizontal: 40,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    padding: 25,
     borderRadius: 25,
     marginBottom: 30,
-    minWidth: 200,
+    width: width - 40,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 8,
+  },
+  instructionHeader: {
     alignItems: 'center',
+    marginBottom: 20,
   },
-  startButtonText: {
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: 'bold',
+  instructionsTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#8B4513',
+    textAlign: 'center',
   },
-  foodPreview: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    padding: 20,
+  instructionGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  instructionCard: {
+    width: '48%',
+    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    padding: 15,
     borderRadius: 15,
     alignItems: 'center',
-    width: width - 40,
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 3,
   },
-  foodPreviewTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 15,
-  },
-  healthyFood: {
-    fontSize: 24,
+  instructionIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#f8b500',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 10,
   },
-  unhealthyFood: {
-    fontSize: 24,
-    opacity: 0.8,
+  instructionIconText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '700',
+  },
+  instructionText: {
+    fontSize: 14,
+    color: '#8B4513',
+    textAlign: 'center',
+    fontWeight: '600',
+  },
+  startButtonContainer: {
+    marginBottom: 20,
+  },
+  startButton: {
+    borderRadius: 30,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 10,
+  },
+  startButtonGradient: {
+    backgroundColor: '#fff',
+    paddingVertical: 20,
+    paddingHorizontal: 50,
+    borderRadius: 30,
+    minWidth: 240,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#f8b500',
+  },
+  startButtonText: {
+    color: '#f8b500',
+    fontSize: 20,
+    fontWeight: '700',
+    letterSpacing: 0.5,
   },
 
   // Game Screen Styles
   gameContainer: {
     flex: 1,
-    backgroundColor: '#87CEEB',
   },
   gameUI: {
     position: 'absolute',
@@ -507,10 +648,18 @@ const styles = StyleSheet.create({
   scoreContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     padding: 15,
-    borderRadius: 15,
+    borderRadius: 20,
     marginTop: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   scoreText: {
     fontSize: 18,
@@ -573,15 +722,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
   controlButton: {
-    backgroundColor: '#4CAF50',
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    backgroundColor: '#ff6b6b',
+    width: 70,
+    height: 70,
+    borderRadius: 35,
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
   },
   controlText: {
     color: '#fff',
@@ -714,30 +873,56 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   playAgainButton: {
-    backgroundColor: '#FF6B6B',
-    paddingVertical: 15,
-    paddingHorizontal: 40,
     borderRadius: 25,
     marginBottom: 15,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 6,
+  },
+  playAgainButtonInner: {
+    backgroundColor: '#fff',
+    paddingVertical: 16,
+    paddingHorizontal: 40,
+    borderRadius: 25,
     minWidth: 200,
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#f8b500',
   },
   playAgainButtonText: {
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: 'bold',
+    color: '#f8b500',
+    fontSize: 18,
+    fontWeight: '600',
   },
   homeButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 20,
-    minWidth: 180,
+    borderRadius: 25,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 6,
+  },
+  homeButtonInner: {
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    paddingVertical: 16,
+    paddingHorizontal: 40,
+    borderRadius: 25,
+    minWidth: 200,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#8B4513',
   },
   homeButtonText: {
-    color: '#fff',
-    fontSize: 16,
+    color: '#8B4513',
+    fontSize: 18,
     fontWeight: '600',
   },
 });
