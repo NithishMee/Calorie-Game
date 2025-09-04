@@ -22,21 +22,60 @@ export default function App() {
   const gameTimerRef = useRef(null);
   const foodSpawnTimerRef = useRef(null);
 
-  // Food types
+  // Food types - Expanded variety
   const foodTypes = [
-    // Healthy foods
+    // Healthy foods - Fruits
     { name: 'Apple', emoji: '🍎', isHealthy: true, points: 10, calories: 52 },
     { name: 'Banana', emoji: '🍌', isHealthy: true, points: 10, calories: 89 },
+    { name: 'Orange', emoji: '🍊', isHealthy: true, points: 10, calories: 47 },
+    { name: 'Strawberry', emoji: '🍓', isHealthy: true, points: 10, calories: 32 },
+    { name: 'Grapes', emoji: '🍇', isHealthy: true, points: 10, calories: 62 },
+    { name: 'Watermelon', emoji: '🍉', isHealthy: true, points: 10, calories: 30 },
+    { name: 'Pineapple', emoji: '🍍', isHealthy: true, points: 10, calories: 50 },
+    { name: 'Peach', emoji: '🍑', isHealthy: true, points: 10, calories: 39 },
+    { name: 'Kiwi', emoji: '🥝', isHealthy: true, points: 10, calories: 61 },
+    { name: 'Mango', emoji: '🥭', isHealthy: true, points: 10, calories: 60 },
+    
+    // Healthy foods - Vegetables
     { name: 'Carrot', emoji: '🥕', isHealthy: true, points: 10, calories: 41 },
     { name: 'Broccoli', emoji: '🥦', isHealthy: true, points: 10, calories: 34 },
     { name: 'Spinach', emoji: '🥬', isHealthy: true, points: 10, calories: 23 },
+    { name: 'Tomato', emoji: '🍅', isHealthy: true, points: 10, calories: 18 },
+    { name: 'Cucumber', emoji: '🥒', isHealthy: true, points: 10, calories: 16 },
+    { name: 'Bell Pepper', emoji: '🫑', isHealthy: true, points: 10, calories: 31 },
+    { name: 'Corn', emoji: '🌽', isHealthy: true, points: 10, calories: 86 },
+    { name: 'Eggplant', emoji: '🍆', isHealthy: true, points: 10, calories: 25 },
+    { name: 'Avocado', emoji: '🥑', isHealthy: true, points: 10, calories: 160 },
+    { name: 'Potato', emoji: '🥔', isHealthy: true, points: 10, calories: 77 },
     
-    // Unhealthy foods
+    // Healthy foods - Nuts & Seeds
+    { name: 'Peanuts', emoji: '🥜', isHealthy: true, points: 10, calories: 567 },
+    { name: 'Coconut', emoji: '🥥', isHealthy: true, points: 10, calories: 354 },
+    
+    // Unhealthy foods - Fast Food
     { name: 'Hamburger', emoji: '🍔', isHealthy: false, points: -15, calories: 354 },
     { name: 'Pizza', emoji: '🍕', isHealthy: false, points: -15, calories: 266 },
     { name: 'French Fries', emoji: '🍟', isHealthy: false, points: -15, calories: 365 },
+    { name: 'Hot Dog', emoji: '🌭', isHealthy: false, points: -15, calories: 290 },
+    { name: 'Taco', emoji: '🌮', isHealthy: false, points: -15, calories: 226 },
+    { name: 'Burrito', emoji: '🌯', isHealthy: false, points: -15, calories: 326 },
+    { name: 'Sandwich', emoji: '🥪', isHealthy: false, points: -15, calories: 250 },
+    
+    // Unhealthy foods - Desserts & Sweets
     { name: 'Ice Cream', emoji: '🍦', isHealthy: false, points: -15, calories: 207 },
     { name: 'Chocolate', emoji: '🍫', isHealthy: false, points: -15, calories: 546 },
+    { name: 'Donut', emoji: '🍩', isHealthy: false, points: -15, calories: 452 },
+    { name: 'Cookie', emoji: '🍪', isHealthy: false, points: -15, calories: 502 },
+    { name: 'Cake', emoji: '🍰', isHealthy: false, points: -15, calories: 257 },
+    { name: 'Pie', emoji: '🥧', isHealthy: false, points: -15, calories: 237 },
+    { name: 'Candy', emoji: '🍬', isHealthy: false, points: -15, calories: 394 },
+    { name: 'Lollipop', emoji: '🍭', isHealthy: false, points: -15, calories: 408 },
+    
+    // Unhealthy foods - Drinks & Snacks
+    { name: 'Soda', emoji: '🥤', isHealthy: false, points: -15, calories: 139 },
+    { name: 'Beer', emoji: '🍺', isHealthy: false, points: -15, calories: 154 },
+    { name: 'Popcorn', emoji: '🍿', isHealthy: false, points: -15, calories: 375 },
+    { name: 'Chips', emoji: '🥨', isHealthy: false, points: -15, calories: 536 },
   ];
 
   const startGame = () => {
@@ -53,7 +92,7 @@ export default function App() {
     
     setCurrentScreen('game');
     setScore(0);
-    setTimeLeft(120); // 2 minutes
+    setTimeLeft(60); // 2 minutes
     setFoods([]);
     setCaughtFoods([]);
     setGameActive(true);
@@ -69,7 +108,7 @@ export default function App() {
       ...randomFood,
       x: column * COLUMN_WIDTH + (COLUMN_WIDTH - FOOD_SIZE) / 2, // Center in column
       y: -FOOD_SIZE,
-      speed: 2 + Math.random() * 2, // Good game speed
+      speed: 3.5 + Math.random() * 3, // Slightly reduced speed for better control
     };
     
 
@@ -84,9 +123,9 @@ export default function App() {
     if (gameTimerRef.current) clearInterval(gameTimerRef.current);
     if (foodSpawnTimerRef.current) clearInterval(foodSpawnTimerRef.current);
 
-    // Start spawning food immediately and then every 2 seconds (good pace)
+    // Start spawning food immediately and then every 1.5 seconds (faster pace)
     spawnFood();
-    foodSpawnTimerRef.current = setInterval(spawnFood, 2000);
+    foodSpawnTimerRef.current = setInterval(spawnFood, 1500);
 
     // Start game timer - this should count down properly
     gameTimerRef.current = setInterval(() => {
@@ -127,7 +166,7 @@ export default function App() {
         // Remove caught and missed foods
         return updatedFoods.filter((food, index) => !foodsToRemove.includes(index));
       });
-    }, 50); // Update every 50ms for faster, smoother movement
+    }, 16); // Update every 16ms (~60fps) for ultra-smooth movement
 
     return () => {
       clearInterval(gameLoop);
