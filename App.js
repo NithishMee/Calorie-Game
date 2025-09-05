@@ -324,10 +324,7 @@ export default function App() {
   // Render Game Screen
   if (currentScreen === 'game') {
     return (
-      <LinearGradient
-        colors={['#fceabb', '#f8b500']}
-        style={styles.gameContainer}
-      >
+      <View style={styles.gameContainer}>
         {/* Game UI */}
         <View style={styles.gameUI}>
           <View style={styles.scoreContainer}>
@@ -383,7 +380,7 @@ export default function App() {
             ]}
           >
             <View style={styles.bowlInner}>
-              <Text style={styles.bowlEmoji}>🥣</Text>
+              <Text style={styles.bowlEmoji}>🧺</Text>
             </View>
           </View>
         </View>
@@ -408,9 +405,7 @@ export default function App() {
             </View>
           </TouchableOpacity>
         </View>
-
-
-      </LinearGradient>
+      </View>
     );
   }
 
@@ -421,10 +416,7 @@ export default function App() {
     const totalCalories = caughtFoods.reduce((total, food) => total + food.calories, 0);
 
     return (
-      <LinearGradient
-        colors={['#fceabb', '#f8b500']}
-        style={styles.resultsContainer}
-      >
+      <View style={styles.resultsContainer}>
         <Text style={styles.resultsTitle}>Game Results</Text>
         
         <View style={styles.scoreCard}>
@@ -477,7 +469,7 @@ export default function App() {
             </View>
           </TouchableOpacity>
         </View>
-      </LinearGradient>
+      </View>
     );
   }
 
@@ -624,6 +616,7 @@ const styles = StyleSheet.create({
   // Game Screen Styles
   gameContainer: {
     flex: 1,
+    backgroundColor: '#fceabb',
   },
   gameUI: {
     position: 'absolute',
@@ -691,10 +684,9 @@ const styles = StyleSheet.create({
   },
   bowl: {
     position: 'absolute',
-    bottom: 0,
+    bottom: -20,
     width: COLUMN_WIDTH,
     height: BOWL_HEIGHT,
-    zIndex: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -716,7 +708,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
   },
   controlButton: {
-    backgroundColor: '#ff6b6b',
+    backgroundColor: '#f8b500',
     width: 70,
     height: 70,
     borderRadius: 35,
@@ -732,9 +724,12 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   controlText: {
+    fontSize: 30,
     color: '#fff',
-    fontSize: 24,
     fontWeight: 'bold',
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 2,
   },
   debugInfo: {
     position: 'absolute',
@@ -753,7 +748,7 @@ const styles = StyleSheet.create({
   // Results Screen Styles
   resultsContainer: {
     flex: 1,
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#f9d56e',  // Mid-layer color between #fceabb and #f8b500
     padding: 20,
     alignItems: 'center',
   },
@@ -808,9 +803,10 @@ const styles = StyleSheet.create({
   },
   caloriesText: {
     fontSize: 20,
-    color: '#fff',
+    color: '#8B4513',
     fontWeight: 'bold',
     marginBottom: 20,
+    textAlign: 'center',
   },
   foodsSection: {
     width: '100%',
@@ -820,7 +816,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#fff',
+    color: '#8B4513',
     marginBottom: 15,
     textAlign: 'center',
   },
@@ -890,6 +886,7 @@ const styles = StyleSheet.create({
   },
   homeButton: {
     borderRadius: 25,
+    marginBottom: 15,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -900,17 +897,17 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   homeButtonInner: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: '#fff',
     paddingVertical: 16,
     paddingHorizontal: 40,
     borderRadius: 25,
     minWidth: 200,
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#8B4513',
+    borderWidth: 3,
+    borderColor: '#f8b500',
   },
   homeButtonText: {
-    color: '#8B4513',
+    color: '#f8b500',
     fontSize: 18,
     fontWeight: '600',
   },
