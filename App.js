@@ -267,11 +267,8 @@ export default function App() {
         style={styles.homeContainer}
       >
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>Healthy Food Catch</Text>
-          <View style={styles.titleUnderline} />
+          <Text style={styles.title}>Healthy Bites</Text>
         </View>
-        <Text style={styles.subtitle}>Catch healthy foods, avoid junk food!</Text>
-        <Text style={styles.tagline}>Play • Learn • Stay Healthy</Text>
         
         <View style={styles.instructionsContainer}>
           <View style={styles.instructionHeader}>
@@ -497,50 +494,33 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 25,
+    paddingHorizontal: 20,
   },
   title: {
-    fontSize: 38,
+    fontSize: 36,
     fontWeight: '800',
-    color: '#8B4513',
+    color: '#FFFFFF',
     textAlign: 'center',
-    marginBottom: 8,
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
-    textShadowOffset: {width: 2, height: 2},
-    textShadowRadius: 4,
+    marginBottom: 20,
+    textShadowColor: '#f8b500',
+    textShadowOffset: {width: 0, height: 0},
+    textShadowRadius: 10,
     letterSpacing: 1,
-  },
-  titleUnderline: {
-    width: 120,
-    height: 4,
-    backgroundColor: '#FF6B35',
-    borderRadius: 2,
-    marginBottom: 10,
-  },
-  subtitle: {
-    fontSize: 22,
-    color: '#8B4513',
-    textAlign: 'center',
-    marginBottom: 8,
-    fontWeight: '600',
-    textShadowColor: 'rgba(0, 0, 0, 0.2)',
-    textShadowOffset: {width: 1, height: 1},
-    textShadowRadius: 2,
-  },
-  tagline: {
-    fontSize: 16,
-    color: '#8B4513',
-    textAlign: 'center',
-    marginBottom: 30,
-    fontWeight: '500',
-    opacity: 0.8,
+    padding: 10,
+    borderWidth: 3,
+    borderColor: '#f8b500',
+    borderRadius: 20,
+    backgroundColor: 'rgba(248, 181, 0, 0.3)',
   },
   instructionsContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    backgroundColor: 'white',
     padding: 25,
     borderRadius: 25,
     marginBottom: 30,
     width: width - 40,
+    borderWidth: 3,
+    borderColor: '#f8b500',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -555,10 +535,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   instructionsTitle: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#8B4513',
+    fontSize: 28,
+    fontWeight: '800',
+    color: '#f8b500',
     textAlign: 'center',
+    marginBottom: 15,
+    textShadowColor: 'rgba(0, 0, 0, 0.2)',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 2,
   },
   instructionGrid: {
     flexDirection: 'row',
@@ -567,8 +551,11 @@ const styles = StyleSheet.create({
   },
   instructionCard: {
     width: '48%',
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    backgroundColor: 'rgb(255, 255, 255)',
     padding: 15,
+    borderWidth: 2,
+    borderColor: '#f8b500',
+    borderRadius: 15,
     borderRadius: 15,
     alignItems: 'center',
     marginBottom: 12,
@@ -596,10 +583,11 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   instructionText: {
-    fontSize: 14,
+    fontSize: 16,
+    fontWeight: '700',
     color: '#8B4513',
     textAlign: 'center',
-    fontWeight: '600',
+    marginTop: 5,
   },
   startButtonContainer: {
     marginBottom: 20,
@@ -623,7 +611,7 @@ const styles = StyleSheet.create({
     minWidth: 240,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
+    borderWidth: 3,
     borderColor: '#f8b500',
   },
   startButtonText: {
@@ -662,9 +650,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   scoreText: {
-    fontSize: 18,
+    fontSize: 24,
+    color: '#8B4513',
     fontWeight: 'bold',
-    color: '#333',
+    marginBottom: 5,
   },
   scoreChange: {
     fontSize: 16,
@@ -673,8 +662,8 @@ const styles = StyleSheet.create({
   },
   timeText: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#FF6B6B',
+    color: '#8B4513',
+    fontWeight: '600',
   },
   gameArea: {
     flex: 1,
@@ -769,9 +758,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   resultsTitle: {
-    fontSize: 28,
+    fontSize: 36,
+    color: '#8B4513',
     fontWeight: 'bold',
-    color: '#fff',
     marginBottom: 20,
     marginTop: 40,
   },
@@ -818,7 +807,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   caloriesText: {
-    fontSize: 18,
+    fontSize: 20,
     color: '#fff',
     fontWeight: 'bold',
     marginBottom: 20,
@@ -891,7 +880,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     minWidth: 200,
     alignItems: 'center',
-    borderWidth: 2,
+    borderWidth: 3,
     borderColor: '#f8b500',
   },
   playAgainButtonText: {
